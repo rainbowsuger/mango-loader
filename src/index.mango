@@ -1,0 +1,62 @@
+{
+  spaceName: 'Lemon', // vuex module name
+  name: 'data1',
+  model: '1',
+  children: [{
+    name: 'data2',
+    sourceType: 'changeless', // changeless/require
+    source: [1, 2, 3]
+  }, {
+    name: 'data3',
+    sourceType: 'require',
+    source: {
+      method: 'get',
+      url: '/shop-config/app-version/get-app-versions-enum',
+      fass: (res) => {
+        if (res) {
+          const { appTypeList = [] } = res || {};
+          return (appTypeList || []).map((item) => {
+            return {
+              label: item.desc,
+              value: item.code
+            };
+          });
+        }
+      }
+    }
+  },
+  {
+    operate: {
+      name: 'operate', // 自定义methods名称
+      type: 'reset', // 重置
+      field: [{ // 需要更新的字段
+        name: 'data2_source',
+        model: [4, 5, 6]
+      }, {
+        name: 'data1',
+        model: 2
+      }]
+    }
+  },
+  {
+    operate: {
+      name: 'data3', // 需要更新的data
+      type: 'search' // 查询
+    }
+  },
+  {
+    operate: {
+      name: 'operate', // 自定义methods名称
+      type: 'submit',
+      action: {
+        method: 'get',
+        url: '/shop-config/app-version/get-app-versions-enum',
+        fass: (res) => {
+          if (res) {
+            alert('提交成功');
+          }
+        }
+      }
+    }
+  }]
+}
